@@ -1,16 +1,68 @@
 # biyung
 
-A new Flutter project.
+## Premium Creations made with Love ❤️
 
-## Getting Started
+## Tugas 7: Elemen Dasar Flutter
+### Jelaskan apa yang dimaksud dengan stateless widget dan stateful widget, dan jelaskan perbedaan dari keduanya.
+Dalam pengembangan aplikasi dengan Flutter, terdapat dua jenis widget utama: **Stateless Widget** dan **Stateful Widget**. Keduanya memiliki fungsi dan karakteristik yang berbeda.
 
-This project is a starting point for a Flutter application.
+1. **Stateless Widget**  
+   Stateless widget adalah widget yang tidak memiliki state yang bisa berubah setelah widget tersebut dibuat. Dengan kata lain, sifat atau tampilannya tidak berubah selama siklus hidup widget tersebut. Stateless widget cocok digunakan untuk komponen UI yang tidak memerlukan perubahan data atau interaksi pengguna yang kompleks. Contoh stateless widget adalah `Text`, `Icon`, dan `Image`.
 
-A few resources to get you started if this is your first Flutter project:
+   Contoh penggunaan Stateless Widget:
+   ```dart
+   class MyStatelessWidget extends StatelessWidget {
+     @override
+     Widget build(BuildContext context) {
+       return Text('Hello, World!');
+     }
+   }
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. **Stateful Widget**  
+   Stateful widget adalah widget yang memiliki state yang dapat berubah sepanjang siklus hidup widget tersebut. Jika suatu widget membutuhkan perubahan tampilan berdasarkan interaksi pengguna atau perubahan data, maka Stateful Widget adalah pilihan yang tepat. Contoh penggunaan yang umum adalah ketika Anda ingin membuat tombol yang bisa diklik atau teks yang berubah ketika ada input dari pengguna.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   Contoh penggunaan Stateful Widget:
+   ```dart
+   class MyStatefulWidget extends StatefulWidget {
+     @override
+     _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+   }
+
+   class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+     int counter = 0;
+
+     void incrementCounter() {
+       setState(() {
+         counter++;
+       });
+     }
+
+     @override
+     Widget build(BuildContext context) {
+       return Column(
+         children: [
+           Text('Counter: $counter'),
+           ElevatedButton(
+             onPressed: incrementCounter,
+             child: Text('Increment'),
+           ),
+         ],
+       );
+     }
+   }
+   ```
+
+### Perbedaan antara Stateless Widget dan Stateful Widget
+
+| Stateless Widget                         | Stateful Widget                               |
+|------------------------------------------|-----------------------------------------------|
+| Tidak memiliki state yang bisa berubah.   | Memiliki state yang bisa berubah selama siklus hidupnya. |
+| Digunakan untuk tampilan statis.         | Digunakan untuk tampilan dinamis yang bisa berubah sesuai interaksi. |
+| Tidak memiliki metode `setState()`.       | Memiliki metode `setState()` untuk memperbarui UI. |
+| Biasanya lebih ringan dan cepat.         | Bisa lebih berat karena melibatkan perubahan state. |
+
+### _Widget_ yang digunakan pada proyek ini dan jelaskan fungsinya
+1. **Material**
+  - SnackBar
+2. 
