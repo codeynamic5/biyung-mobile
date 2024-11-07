@@ -2,7 +2,7 @@
 
 ## Premium Creations made with Love ❤️
 
-## Tugas 7: Elemen Dasar Flutter
+# Tugas 7: Elemen Dasar Flutter
 ### 1. Jelaskan apa yang dimaksud dengan stateless widget dan stateful widget, dan jelaskan perbedaan dari keduanya.
 Dalam pengembangan aplikasi dengan Flutter, terdapat dua jenis widget utama: **Stateless Widget** dan **Stateful Widget**. Keduanya memiliki fungsi dan karakteristik yang berbeda.
 
@@ -270,3 +270,13 @@ void main() {
         ),
       ),
    ```
+# Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
+### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
+
+### 2. Penjelasan dan Perbandingan Penggunaan Column dan Row pada Flutter. Contoh Implementasi dari Masing-Masing Layout Widget.
+
+### 3. Apa saja Elemen Input yang digunakan pada Halaman _Form_ di Tugas 8 ini. Apakah terdapat elemen input Flutter lain yang tidak digunakan pada tugas ini?
+
+### 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah ada implementasi tema pada aplikasi ini?
+
+### 5. Bagaimana cara menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
