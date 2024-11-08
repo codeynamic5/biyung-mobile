@@ -351,3 +351,54 @@ Row(
 ### 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah ada implementasi tema pada aplikasi ini?
 
 ### 5. Bagaimana cara menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
+Cara mengangani navigasi dalam aplikasi, khususnya pada aplikasi Biyung, adalah dengan menggunakan _Navigator_ dan _Named Routes_. Berikut adalah beberapa contoh implementasinya:
+
+#### 1. **Menggunakan Named Routes**
+**Named Routes**: Penggunaan *named routes* mempermudah navigasi pada aplikasi yang memiliki banyak halaman, karena kita bisa menggunakan nama alih-alih membuat instance dari setiap halaman.
+**Menggunakan MaterialPageRoute dengan pushReplacement**:
+<br/>**`MaterialApp`**:
+   ```dart
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/productEntry': (context) => ProductEntryFormPage(),
+      },
+    );
+  }
+}
+   ```
+**`ListTile`**:
+```dart
+ListTile(
+  leading: const Icon(Icons.home_outlined),
+  title: const Text('Halaman Utama'),
+  onTap: () {
+    Navigator.pushReplacementNamed(context, '/');
+  },
+),
+ListTile(
+  leading: const Icon(Icons.add_box_outlined),  // Gunakan ikon yang valid
+  title: const Text('Tambah Product'),
+  onTap: () {
+    Navigator.pushReplacementNamed(context, '/productEntry');
+  },
+),
+
+```
+
+```dart
+if (item.name == "Tambah Product") {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ProductEntryFormPage()),
+  );
+}
+```
