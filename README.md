@@ -355,7 +355,7 @@ Cara mengangani navigasi dalam aplikasi, khususnya pada aplikasi Biyung, adalah 
 
 #### 1. **Menggunakan Named Routes**
 **Named Routes**: Penggunaan *named routes* mempermudah navigasi pada aplikasi yang memiliki banyak halaman, karena kita bisa menggunakan nama alih-alih membuat instance dari setiap halaman.
-**Menggunakan MaterialPageRoute dengan pushReplacement**:
+#### 2. **Menggunakan MaterialPageRoute dengan pushReplacement**:
 <br/>**`MaterialApp`**:
    ```dart
 void main() {
