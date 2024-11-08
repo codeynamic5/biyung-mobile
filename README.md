@@ -272,8 +272,79 @@ void main() {
    ```
 # Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
 ### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
+Di Flutter, kata kunci `const` digunakan untuk mendefinisikan *immutable* objects, yaitu objek yang tidak dapat diubah setelah dibuat. Dengan `const`, kita dapat membuat objek konstan di mana nilainya akan tetap sama selama aplikasi berjalan.
 
+#### Kegunaan `const` di Flutter:
+1. **Optimisasi Memori**: Ketika kita menggunakan `const`, Flutter tahu bahwa objek ini tidak akan berubah, sehingga Flutter dapat melakukan optimisasi dan hanya membuat satu salinan objek tersebut. Setiap kali kita menggunakan objek `const` dengan nilai yang sama, Flutter akan merujuk pada salinan yang sudah ada, alih-alih membuat objek baru. Hal ini dapat menghemat penggunaan memori.
+
+2. **Kinerja Lebih Baik**: Karena Flutter tidak perlu membuat objek baru setiap kali kita memerlukan nilai yang sama, kinerja aplikasi menjadi lebih efisien. Penggunaan `const` dapat mengurangi overhead dalam proses rendering UI, terutama pada aplikasi yang memiliki banyak elemen statis.
+
+3. **Membantu dalam *Hot Reload* dan *Hot Restart***: Karena objek `const` tidak berubah, Flutter dapat memanfaatkan cache dan mempercepat proses *hot reload* atau *hot restart*. Ini membuat pengembangan aplikasi lebih lancar dan responsif.
+
+#### Kapan Sebaiknya Menggunakan `const`:
+- **Widget Statis**: Gunakan `const` pada widget yang tidak akan berubah selama aplikasi berjalan, misalnya *text labels*, ikon, atau layout statis. Ini berguna saat kita membuat UI yang tidak interaktif atau bagian yang hanya perlu dirender sekali.
+- **Data yang Bersifat Tetap**: Jika ada data yang nilainya konstan atau tidak perlu berubah, seperti nilai `color`, `padding`, atau `margin`, menggunakan `const` akan lebih efisien.
+- **Penggunaan di Dalam Build Method**: Di dalam `build` method, jika ada widget atau elemen UI yang tidak berubah, menambahkan `const` bisa membantu meningkatkan kinerja.
+
+#### Kapan Tidak Menggunakan `const`:
+- **Objek yang Dinamis**: Jika objek akan berubah sesuai dengan state atau input pengguna, hindari penggunaan `const`. Misalnya, ketika kita membuat elemen UI yang responsif terhadap aksi pengguna, objek tersebut tidak seharusnya dideklarasikan dengan `const`.
+- **Widget dengan Data yang Diambil Secara Asinkron**: Jika widget menampilkan data dari hasil pemanggilan API atau perubahan state lain, `const` tidak diperlukan karena widget akan perlu dirender ulang setiap kali data berubah.
 ### 2. Penjelasan dan Perbandingan Penggunaan Column dan Row pada Flutter. Contoh Implementasi dari Masing-Masing Layout Widget.
+#### 1. `Column`
+- `Column` digunakan untuk menempatkan widget secara vertikal, dari atas ke bawah.
+- Biasanya digunakan saat kita ingin menampilkan elemen-elemen yang membutuhkan layout vertikal, seperti daftar item atau formulir.
+- Atribut penting dalam `Column`:
+  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Column` disejajarkan secara vertikal (misalnya `start`, `center`, `end`, atau `spaceBetween`).
+  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Column` secara horizontal.
+
+**Contoh Implementasi `Column`:**
+
+```dart
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,  // Atur posisi widget di tengah secara vertikal
+  crossAxisAlignment: CrossAxisAlignment.start, // Widget disejajarkan ke kiri secara horizontal
+  children: <Widget>[
+    Text('Item 1'),
+    Text('Item 2'),
+    ElevatedButton(
+      onPressed: () {},
+      child: Text('Button 1'),
+    ),
+  ],
+);
+```
+#### 2. `Row`
+- `Row` digunakan untuk menempatkan widget secara horizontal, dari kiri ke kanan.
+- Biasanya digunakan saat ingin membuat layout dengan beberapa elemen sejajar secara horizontal, seperti tampilan ikon dengan teks di sebelahnya.
+- Atribut penting dalam `Row` adalah:
+  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Row` disejajarkan secara horizontal.
+  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Row` secara vertikal.
+
+**Contoh Implementasi `Row`:**
+
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,  // Atur jarak antar widget secara horizontal
+  crossAxisAlignment: CrossAxisAlignment.center,     // Widget disejajarkan di tengah secara vertikal
+  children: <Widget>[
+    Icon(Icons.star, color: Colors.amber),
+    Text('Rating'),
+    ElevatedButton(
+      onPressed: () {},
+      child: Text('Rate Now'),
+    ),
+  ],
+);
+```
+
+#### Perbandingan `Column` dan `Row`:
+| Aspek                  | Column                                 | Row                                     |
+|------------------------|----------------------------------------|-----------------------------------------|
+| Orientasi Layout       | Vertikal                              | Horizontal                              |
+| Contoh Penggunaan      | Daftar item vertikal, form            | Baris ikon dengan teks atau tombol      |
+| Atribut Utama          | `mainAxisAlignment`, `crossAxisAlignment` | `mainAxisAlignment`, `crossAxisAlignment` |
+| Responsif              | Membutuhkan `Expanded` atau `Flexible` jika ingin mengisi ruang yang tersedia di layar | Membutuhkan `Expanded` atau `Flexible` untuk mengatur agar elemen tidak terpotong jika melebihi lebar layar |
+| Pengaturan Tinggi/Lebar| Membentang ke atas dan bawah layar jika tidak diatur (`MainAxisSize.max`) | Membentang ke kiri dan kanan layar jika tidak diatur (`MainAxisSize.max`) |
 
 ### 3. Apa saja Elemen Input yang digunakan pada Halaman _Form_ di Tugas 8 ini. Apakah terdapat elemen input Flutter lain yang tidak digunakan pada tugas ini?
 
