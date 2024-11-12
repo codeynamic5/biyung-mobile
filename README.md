@@ -2,6 +2,182 @@
 
 ## Premium Creations made with Love ❤️
 
+# Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
+### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
+Di Flutter, kata kunci `const` digunakan untuk mendefinisikan *immutable* objects, yaitu objek yang tidak dapat diubah setelah dibuat. Dengan `const`, kita dapat membuat objek konstan di mana nilainya akan tetap sama selama aplikasi berjalan.
+
+#### Kegunaan `const` di Flutter:
+1. **Optimisasi Memori**: Ketika kita menggunakan `const`, Flutter tahu bahwa objek ini tidak akan berubah, sehingga Flutter dapat melakukan optimisasi dan hanya membuat satu salinan objek tersebut. Setiap kali kita menggunakan objek `const` dengan nilai yang sama, Flutter akan merujuk pada salinan yang sudah ada, alih-alih membuat objek baru. Hal ini dapat menghemat penggunaan memori.
+
+2. **Kinerja Lebih Baik**: Karena Flutter tidak perlu membuat objek baru setiap kali kita memerlukan nilai yang sama, kinerja aplikasi menjadi lebih efisien. Penggunaan `const` dapat mengurangi overhead dalam proses rendering UI, terutama pada aplikasi yang memiliki banyak elemen statis.
+
+3. **Membantu dalam *Hot Reload* dan *Hot Restart***: Karena objek `const` tidak berubah, Flutter dapat memanfaatkan cache dan mempercepat proses *hot reload* atau *hot restart*. Ini membuat pengembangan aplikasi lebih lancar dan responsif.
+
+#### Kapan Sebaiknya Menggunakan `const`:
+- **Widget Statis**: Gunakan `const` pada widget yang tidak akan berubah selama aplikasi berjalan, misalnya *text labels*, ikon, atau layout statis. Ini berguna saat kita membuat UI yang tidak interaktif atau bagian yang hanya perlu dirender sekali.
+- **Data yang Bersifat Tetap**: Jika ada data yang nilainya konstan atau tidak perlu berubah, seperti nilai `color`, `padding`, atau `margin`, menggunakan `const` akan lebih efisien.
+- **Penggunaan di Dalam Build Method**: Di dalam `build` method, jika ada widget atau elemen UI yang tidak berubah, menambahkan `const` bisa membantu meningkatkan kinerja.
+
+#### Kapan Tidak Menggunakan `const`:
+- **Objek yang Dinamis**: Jika objek akan berubah sesuai dengan state atau input pengguna, hindari penggunaan `const`. Misalnya, ketika kita membuat elemen UI yang responsif terhadap aksi pengguna, objek tersebut tidak seharusnya dideklarasikan dengan `const`.
+- **Widget dengan Data yang Diambil Secara Asinkron**: Jika widget menampilkan data dari hasil pemanggilan API atau perubahan state lain, `const` tidak diperlukan karena widget akan perlu dirender ulang setiap kali data berubah.
+
+### 2. Penjelasan dan Perbandingan Penggunaan Column dan Row pada Flutter. Contoh Implementasi dari Masing-Masing Layout Widget.
+#### 1. `Column`
+- `Column` digunakan untuk menempatkan widget secara vertikal, dari atas ke bawah.
+- Biasanya digunakan saat kita ingin menampilkan elemen-elemen yang membutuhkan layout vertikal, seperti daftar item atau formulir.
+- Atribut penting dalam `Column`:
+  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Column` disejajarkan secara vertikal (misalnya `start`, `center`, `end`, atau `spaceBetween`).
+  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Column` secara horizontal.
+
+**Contoh Implementasi `Column`:**
+
+```dart
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,  // Atur posisi widget di tengah secara vertikal
+  crossAxisAlignment: CrossAxisAlignment.start, // Widget disejajarkan ke kiri secara horizontal
+  children: <Widget>[
+    Text('Item 1'),
+    Text('Item 2'),
+    ElevatedButton(
+      onPressed: () {},
+      child: Text('Button 1'),
+    ),
+  ],
+);
+```
+#### 2. `Row`
+- `Row` digunakan untuk menempatkan widget secara horizontal, dari kiri ke kanan.
+- Biasanya digunakan saat ingin membuat layout dengan beberapa elemen sejajar secara horizontal, seperti tampilan ikon dengan teks di sebelahnya.
+- Atribut penting dalam `Row` adalah:
+  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Row` disejajarkan secara horizontal.
+  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Row` secara vertikal.
+
+**Contoh Implementasi `Row`:**
+
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,  // Atur jarak antar widget secara horizontal
+  crossAxisAlignment: CrossAxisAlignment.center,     // Widget disejajarkan di tengah secara vertikal
+  children: <Widget>[
+    Icon(Icons.star, color: Colors.amber),
+    Text('Rating'),
+    ElevatedButton(
+      onPressed: () {},
+      child: Text('Rate Now'),
+    ),
+  ],
+);
+```
+
+#### Perbandingan `Column` dan `Row`:
+| Aspek                  | Column                                 | Row                                     |
+|------------------------|----------------------------------------|-----------------------------------------|
+| Orientasi Layout       | Vertikal                              | Horizontal                              |
+| Contoh Penggunaan      | Daftar item vertikal, form            | Baris ikon dengan teks atau tombol      |
+| Atribut Utama          | `mainAxisAlignment`, `crossAxisAlignment` | `mainAxisAlignment`, `crossAxisAlignment` |
+| Responsif              | Membutuhkan `Expanded` atau `Flexible` jika ingin mengisi ruang yang tersedia di layar | Membutuhkan `Expanded` atau `Flexible` untuk mengatur agar elemen tidak terpotong jika melebihi lebar layar |
+| Pengaturan Tinggi/Lebar| Membentang ke atas dan bawah layar jika tidak diatur (`MainAxisSize.max`) | Membentang ke kiri dan kanan layar jika tidak diatur (`MainAxisSize.max`) |
+
+### 3. Apa saja Elemen Input yang digunakan pada Halaman _Form_ di Tugas 8 ini. Apakah terdapat elemen input Flutter lain yang tidak digunakan pada tugas ini?
+#### Elemen Input yang Digunakan dalam Tugas 8 ini
+1. **TextFormField**
+   **TextFormField** memiliki beberapa fungsi, di antaranya yaitu untuk input produk, deskripsi, dan menentukan jumlah produk.
+2. **ElevatedButton**
+   **ElevatedButton** digunakan untuk menyimpan data, seperti tombol save yang ketika dipencet akan menyimpan data yang berhubungan dengan form yang menampilkan AlertDialog.
+#### Elemen Input yang Tidak Digunakan dalam Tugas 8 ini
+1. DropdownButton
+   Berfungsi untuk memilih kategori atau jenis dari sebuah produk.
+2. Switch
+   Berfungsi untuk apabila memiliki beberapa opsi aktif maupun non-aktif seperti status produk.
+3. Slider
+   Berfungsi untuk mengatur jumlah produk dalam rentang waktu tertentu seperti stok produk.
+4. RadioListTile
+   Berfungsi untuk memilih satu opsi dari beberapa pilihan opsi yang ada.
+### 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah ada implementasi tema pada aplikasi ini?
+Dalam pengaturan tema dalam aplikasi agar konsisten adalah memodifikasi widget `MaterialApp` dalam file `main.dart`:
+
+```
+@override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.indigo,
+        ).copyWith(secondary: Colors.indigo[900]),
+      ),
+      home: MyHomePage(),
+    );
+  }
+
+```
+`MaterialApp` dapat disempurnakan pengaplikasiannya dengan kode ini yang berada dalam file `menu.dart`:
+
+```
+   // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
+   backgroundColor: Theme.of(context).colorScheme.primary,
+   // Mengganti warna icon drawer menjadi putih
+   iconTheme: const IconThemeData(color: Colors.white),
+```
+Dengan potongan kode tersebut, warna latar belakang fitur dapat konsisten dan sama sesuai dengan tema aplikasi.
+
+### 5. Bagaimana cara menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
+Cara mengangani navigasi dalam aplikasi, khususnya pada aplikasi Biyung, adalah dengan menggunakan _Navigator_ dan _Named Routes_. Berikut adalah beberapa contoh implementasinya:
+
+#### 1. **Menggunakan Named Routes**
+**Named Routes**: Penggunaan *named routes* mempermudah navigasi pada aplikasi yang memiliki banyak halaman, karena kita bisa menggunakan nama alih-alih membuat instance dari setiap halaman.
+#### 2. **Menggunakan MaterialPageRoute dengan pushReplacement**:
+<br/>**`MaterialApp`**:
+   ```dart
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/productEntry': (context) => ProductEntryFormPage(),
+      },
+    );
+  }
+}
+   ```
+**`ListTile`**:
+```dart
+ListTile(
+  leading: const Icon(Icons.home_outlined),
+  title: const Text('Halaman Utama'),
+  onTap: () {
+    Navigator.pushReplacementNamed(context, '/');
+  },
+),
+ListTile(
+  leading: const Icon(Icons.add_box_outlined),  // Gunakan ikon yang valid
+  title: const Text('Tambah Product'),
+  onTap: () {
+    Navigator.pushReplacementNamed(context, '/productEntry');
+  },
+),
+
+```
+
+```dart
+if (item.name == "Tambah Product") {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ProductEntryFormPage()),
+  );
+}
+```
+
+
+
 # Tugas 7: Elemen Dasar Flutter
 ### 1. Jelaskan apa yang dimaksud dengan stateless widget dan stateful widget, dan jelaskan perbedaan dari keduanya.
 Dalam pengembangan aplikasi dengan Flutter, terdapat dua jenis widget utama: **Stateless Widget** dan **Stateful Widget**. Keduanya memiliki fungsi dan karakteristik yang berbeda.
@@ -270,135 +446,3 @@ void main() {
         ),
       ),
    ```
-# Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
-### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
-Di Flutter, kata kunci `const` digunakan untuk mendefinisikan *immutable* objects, yaitu objek yang tidak dapat diubah setelah dibuat. Dengan `const`, kita dapat membuat objek konstan di mana nilainya akan tetap sama selama aplikasi berjalan.
-
-#### Kegunaan `const` di Flutter:
-1. **Optimisasi Memori**: Ketika kita menggunakan `const`, Flutter tahu bahwa objek ini tidak akan berubah, sehingga Flutter dapat melakukan optimisasi dan hanya membuat satu salinan objek tersebut. Setiap kali kita menggunakan objek `const` dengan nilai yang sama, Flutter akan merujuk pada salinan yang sudah ada, alih-alih membuat objek baru. Hal ini dapat menghemat penggunaan memori.
-
-2. **Kinerja Lebih Baik**: Karena Flutter tidak perlu membuat objek baru setiap kali kita memerlukan nilai yang sama, kinerja aplikasi menjadi lebih efisien. Penggunaan `const` dapat mengurangi overhead dalam proses rendering UI, terutama pada aplikasi yang memiliki banyak elemen statis.
-
-3. **Membantu dalam *Hot Reload* dan *Hot Restart***: Karena objek `const` tidak berubah, Flutter dapat memanfaatkan cache dan mempercepat proses *hot reload* atau *hot restart*. Ini membuat pengembangan aplikasi lebih lancar dan responsif.
-
-#### Kapan Sebaiknya Menggunakan `const`:
-- **Widget Statis**: Gunakan `const` pada widget yang tidak akan berubah selama aplikasi berjalan, misalnya *text labels*, ikon, atau layout statis. Ini berguna saat kita membuat UI yang tidak interaktif atau bagian yang hanya perlu dirender sekali.
-- **Data yang Bersifat Tetap**: Jika ada data yang nilainya konstan atau tidak perlu berubah, seperti nilai `color`, `padding`, atau `margin`, menggunakan `const` akan lebih efisien.
-- **Penggunaan di Dalam Build Method**: Di dalam `build` method, jika ada widget atau elemen UI yang tidak berubah, menambahkan `const` bisa membantu meningkatkan kinerja.
-
-#### Kapan Tidak Menggunakan `const`:
-- **Objek yang Dinamis**: Jika objek akan berubah sesuai dengan state atau input pengguna, hindari penggunaan `const`. Misalnya, ketika kita membuat elemen UI yang responsif terhadap aksi pengguna, objek tersebut tidak seharusnya dideklarasikan dengan `const`.
-- **Widget dengan Data yang Diambil Secara Asinkron**: Jika widget menampilkan data dari hasil pemanggilan API atau perubahan state lain, `const` tidak diperlukan karena widget akan perlu dirender ulang setiap kali data berubah.
-### 2. Penjelasan dan Perbandingan Penggunaan Column dan Row pada Flutter. Contoh Implementasi dari Masing-Masing Layout Widget.
-#### 1. `Column`
-- `Column` digunakan untuk menempatkan widget secara vertikal, dari atas ke bawah.
-- Biasanya digunakan saat kita ingin menampilkan elemen-elemen yang membutuhkan layout vertikal, seperti daftar item atau formulir.
-- Atribut penting dalam `Column`:
-  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Column` disejajarkan secara vertikal (misalnya `start`, `center`, `end`, atau `spaceBetween`).
-  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Column` secara horizontal.
-
-**Contoh Implementasi `Column`:**
-
-```dart
-Column(
-  mainAxisAlignment: MainAxisAlignment.center,  // Atur posisi widget di tengah secara vertikal
-  crossAxisAlignment: CrossAxisAlignment.start, // Widget disejajarkan ke kiri secara horizontal
-  children: <Widget>[
-    Text('Item 1'),
-    Text('Item 2'),
-    ElevatedButton(
-      onPressed: () {},
-      child: Text('Button 1'),
-    ),
-  ],
-);
-```
-#### 2. `Row`
-- `Row` digunakan untuk menempatkan widget secara horizontal, dari kiri ke kanan.
-- Biasanya digunakan saat ingin membuat layout dengan beberapa elemen sejajar secara horizontal, seperti tampilan ikon dengan teks di sebelahnya.
-- Atribut penting dalam `Row` adalah:
-  - `mainAxisAlignment`: Mengatur bagaimana widget di dalam `Row` disejajarkan secara horizontal.
-  - `crossAxisAlignment`: Mengatur sejajar atau tidaknya widget di dalam `Row` secara vertikal.
-
-**Contoh Implementasi `Row`:**
-
-```dart
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceAround,  // Atur jarak antar widget secara horizontal
-  crossAxisAlignment: CrossAxisAlignment.center,     // Widget disejajarkan di tengah secara vertikal
-  children: <Widget>[
-    Icon(Icons.star, color: Colors.amber),
-    Text('Rating'),
-    ElevatedButton(
-      onPressed: () {},
-      child: Text('Rate Now'),
-    ),
-  ],
-);
-```
-
-#### Perbandingan `Column` dan `Row`:
-| Aspek                  | Column                                 | Row                                     |
-|------------------------|----------------------------------------|-----------------------------------------|
-| Orientasi Layout       | Vertikal                              | Horizontal                              |
-| Contoh Penggunaan      | Daftar item vertikal, form            | Baris ikon dengan teks atau tombol      |
-| Atribut Utama          | `mainAxisAlignment`, `crossAxisAlignment` | `mainAxisAlignment`, `crossAxisAlignment` |
-| Responsif              | Membutuhkan `Expanded` atau `Flexible` jika ingin mengisi ruang yang tersedia di layar | Membutuhkan `Expanded` atau `Flexible` untuk mengatur agar elemen tidak terpotong jika melebihi lebar layar |
-| Pengaturan Tinggi/Lebar| Membentang ke atas dan bawah layar jika tidak diatur (`MainAxisSize.max`) | Membentang ke kiri dan kanan layar jika tidak diatur (`MainAxisSize.max`) |
-
-### 3. Apa saja Elemen Input yang digunakan pada Halaman _Form_ di Tugas 8 ini. Apakah terdapat elemen input Flutter lain yang tidak digunakan pada tugas ini?
-
-### 4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah ada implementasi tema pada aplikasi ini?
-
-### 5. Bagaimana cara menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
-Cara mengangani navigasi dalam aplikasi, khususnya pada aplikasi Biyung, adalah dengan menggunakan _Navigator_ dan _Named Routes_. Berikut adalah beberapa contoh implementasinya:
-
-#### 1. **Menggunakan Named Routes**
-**Named Routes**: Penggunaan *named routes* mempermudah navigasi pada aplikasi yang memiliki banyak halaman, karena kita bisa menggunakan nama alih-alih membuat instance dari setiap halaman.
-#### 2. **Menggunakan MaterialPageRoute dengan pushReplacement**:
-<br/>**`MaterialApp`**:
-   ```dart
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyHomePage(),
-        '/productEntry': (context) => ProductEntryFormPage(),
-      },
-    );
-  }
-}
-   ```
-**`ListTile`**:
-```dart
-ListTile(
-  leading: const Icon(Icons.home_outlined),
-  title: const Text('Halaman Utama'),
-  onTap: () {
-    Navigator.pushReplacementNamed(context, '/');
-  },
-),
-ListTile(
-  leading: const Icon(Icons.add_box_outlined),  // Gunakan ikon yang valid
-  title: const Text('Tambah Product'),
-  onTap: () {
-    Navigator.pushReplacementNamed(context, '/productEntry');
-  },
-),
-
-```
-
-```dart
-if (item.name == "Tambah Product") {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ProductEntryFormPage()),
-  );
-}
-```
