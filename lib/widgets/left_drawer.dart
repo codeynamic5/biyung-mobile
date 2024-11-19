@@ -1,3 +1,4 @@
+import 'package:biyung/screens/list_productentry.dart';
 import 'package:flutter/material.dart';
 import 'package:biyung/screens/menu.dart';
 import 'package:biyung/screens/productentry_form.dart';
@@ -61,6 +62,17 @@ class LeftDrawer extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ProductEntryFormPage(),
                 ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add_reaction_rounded),
+            title: const Text('Daftar Product'),
+            onTap: () {
+              // Route menu ke halaman product
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductEntryPage()),
               );
             },
           ),

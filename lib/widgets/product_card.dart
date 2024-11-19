@@ -1,3 +1,4 @@
+import 'package:biyung/screens/list_productentry.dart';
 import 'package:flutter/material.dart';
 import 'package:biyung/screens/productentry_form.dart';
 
@@ -53,6 +54,11 @@ class ItemCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => const ProductEntryFormPage()),
+            );
+          } else if (item.name == "Lihat Product") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductEntryPage()),
             );
           }
         },
