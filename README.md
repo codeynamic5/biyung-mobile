@@ -27,18 +27,128 @@ Sistem autentikasi dalam aplikasi melibatkan tiga fungsi utama yang saling terka
 
 ### 6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step!
 #### Mengimplementasikan fitur registrasi akun pada proyek tugas Flutter.
+Untuk implementasi fitur registrasi, saya membuat app authentication di proyek Django, memasukkan django-cors-headers di dalam `INSTALLED_APPS` yang saya modifikasi di dalam file `settings.py`. Saya juga menambahkan MIDDLEWARE di dalam file `settings.py`.<br/>
+**`settings.py`**
+```
+INSTALLED_APPS = [
+    
+    'corsheaders',
+]
+
+MIDDLEWARE = [
+    
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+```
+Di dalam file `views.py` saya menambahkan fungsi pada app authentication
+**`views.py`**
+```
+  @csrf_exempt
+  def register(request):
+      if request.method == 'POST':
+          data = json.loads(request.body)
+          username = data['username']
+          password1 = data['password1']
+          password2 = data['password2']
+  
+          # Check if the passwords match
+          if password1 != password2:
+              return JsonResponse({
+                  "status": False,
+                  "message": "Passwords do not match."
+              }, status=400)
+          
+          # Check if the username is already taken
+          if User.objects.filter(username=username).exists():
+              return JsonResponse({
+                  "status": False,
+                  "message": "Username already exists."
+              }, status=400)
+          
+          # Create the new user
+          user = User.objects.create_user(username=username, password=password1)
+          user.save()
+          
+          return JsonResponse({
+              "username": user.username,
+              "status": 'success',
+              "message": "User created successfully!"
+          }, status=200)
+      
+      else:
+          return JsonResponse({
+              "status": False,
+              "message": "Invalid request method."
+          }, status=400)
+```
 
 #### Membuat halaman login pada proyek tugas Flutter.
+Sebelum membuat halaman login, perlu mengunduh paket terlebih dahulu sehingga sistem autentikasi dapat terintegrasi dengan Django. Untuk mengunduh, dapat menjalankan di dalam terminal perintah berikut: `flutter pub add provider` dan `flutter pub add pbp_django_auth`. Di dalam file `main.dart` terdapat perubahan dari `home: MyHomePage()`, menjadi `home: const LoginPage()`. Hal tersebut agar aplikasi memiliki sifat login restricted.
+Seperti yang di atas, terdapat penambahan kode di dalam `views.py`:
+**`views.py`**
+```
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+```
 
 #### Mengintegrasikan sistem autentikasi Django dengan proyek tugas Flutter.
+Di dalam folder `screens` terdapat file `login.dart` yang dapat diintegrasikan dengan sistem autentikasi Django. Hal tersebut dapat dilakukan dengan cara membuat widget dan di dalamnya terdapat TextField yang dapat mengisi input username dan password. Pada fungsi login di dalam file `views.py`, dapat dibuat button untuk submit, hal tersebut dengan cara menggunakan `ElevatedButton` dan melakukan sebuah request untuk memungkinkan `onPressed()` bekerja, sehingga mengirimkan ke _Django App Authentication_. Apabila sukses dalam login, maka akan ada kondisi yang menunjukkan hal tersebut, sama halnya kalo login gagal. Jika login berhasil dilakukan, kembangkan `pushReplacement` ke dalam file `menu.dart`. Beda halnya apabila gagal login, maka akan tetap di halaman login.
 
 #### Membuat model kustom sesuai dengan proyek aplikasi Django.
+Dalam pembuatan model kustom, buat beberapa contoh produk yang akan ditambah dengan add new product, setelah itu dapat mengambil data dalam format JSON yang dapat diambil dari website Quicktype. Dalam proyek Flutternya, dapat membuat direktori baru khusus data JSON yang telah diconvert sebelumnya. File tersebut bernama `product_entry.dart`.
 
 #### Membuat halaman yang berisi daftar semua item yang terdapat pada endpoint JSON di Django
+Pembuatan halaman yang berisi daftar semua item, pertama harus membuat sebuah file di dalam folder screens yang bernama `list_productentry.dart`. Di dalam file tersebut, data JSON Django yang telah dikumpulkan akan dimasukkan di dalam file dan buat menjadi sebuah list. Untuk penyempurnaan struktur, dapat membuat ListView sesuai dengan data yang ingin ditampilkan dalam bentuk kolom yang rapi di dalam aplikasi. Dari situ, nama produk, harga produk, dan deskripsi produk dapat ditampilkan di dalam aplikasi.
+
 
 #### Membuat halaman detail untuk setiap item yang terdapat pada halaman daftar Item.
+Untuk membuat halaman detail setiap item, di dalam file `list_productentry.dart`, lengkapi ListView dengan menambahkan fungsi `onPressed()`. Fungsi ini akan memungkinkan setiap item dalam list memberikan respons ketika ditekan. Untuk navigasi, dapat menggunakan metode `Navigator.push()`, sehingga memungkinkan operasi pop pada halaman berikutnya. Di dalam fungsi `onPressed()`, lakukan pengiriman data product agar dapat digunakan di halaman lainnya.
+
+Selanjutnya, buatlah berkas baru dengan nama `details_product.dart` dalam direktori screens. Karena data product telah dikirimkan dari `list_productentry.dart`, pada `details_product.dart` kita hanya perlu menampilkan informasi dari setiap field data product tersebut. Tambahkan juga sebuah `ElevatedButton` dengan implementasi `onPressed()` yang ketika ditekan akan menggunakan `Navigator.pop` untuk mengarahkan pengguna kembali ke halaman daftar produk.
 
 #### Melakukan filter pada halaman daftar item dengan hanya menampilkan item yang terasosiasi dengan pengguna yang login.
+Dalam melakukan filter pada halaman daftar item, dapat melakukan modifikasi pada saat login, dimana flutter mengirim sebuah informasi tentang username dan password ke Django. Sehingga, memungkinkan untuk dilakukan filter terhadap masing-masing pengguna yang sesuai. Di sinilah method `authenticate` dapat digunakan, yaitu sebagai berikut:
+```
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+
+```
+Authenticate digunakan dengan tujuan membatasi pengguna yang memgakses aplikasi, sehingga pengguna yang telah login saja yang dapat mengakses semua fitur dalam aplikasi. 
 
 # Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
 ### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
