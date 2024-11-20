@@ -123,7 +123,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final response = await request.postJson(
-                          "http://biyung/create-flutter/",
+                          "http://127.0.0.1:8000/create-flutter/",
                           jsonEncode(<String, String>{
                             'name': _name,
                             'price': _price.toString(),
@@ -134,7 +134,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                           if (response['status'] == 'success') {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
-                              content: Text("Mood baru berhasil disimpan!"),
+                              content: Text("Product baru berhasil disimpan!"),
                             ));
                             Navigator.pushReplacement(
                               context,

@@ -1,3 +1,4 @@
+import 'package:biyung/screens/detail_product.dart';
 import 'package:flutter/material.dart';
 import 'package:biyung/models/product_entry.dart';
 import 'package:biyung/widgets/left_drawer.dart';
@@ -14,11 +15,11 @@ class ProductEntryPage extends StatefulWidget {
 class _ProductEntryPageState extends State<ProductEntryPage> {
   Future<List<ProductEntry>> fetchProduct(CookieRequest request) async {
     // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-    final response = await request.get('http://localhost:8000/ebiyung/json/');
-    
+    final response = await request.get('http://localhost:8000/json/');
+
     // Melakukan decode response menjadi bentuk json
     var data = response;
-    
+
     // Melakukan konversi data json menjadi object ProductEntry
     List<ProductEntry> listProduct = [];
     for (var d in data) {
@@ -56,30 +57,41 @@ class _ProductEntryPageState extends State<ProductEntryPage> {
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${snapshot.data![index].fields.product}",
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                itemBuilder: (_, index) => InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailProductPage(
+                            product: snapshot.data![index],
+                          ),
                         ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${snapshot.data![index].fields.product}",
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text("${snapshot.data![index].fields.name}"),
+                          const SizedBox(height: 10),
+                          Text("${snapshot.data![index].fields.price}"),
+                          const SizedBox(height: 10),
+                          Text("${snapshot.data![index].fields.description}"),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.name}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.price}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.description}"),
-                    ],
-                  ),
-                ),
+                    )),
               );
             }
           }

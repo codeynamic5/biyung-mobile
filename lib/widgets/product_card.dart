@@ -53,13 +53,13 @@ class ItemCard extends StatelessWidget {
             ..showSnackBar(SnackBar(
                 content: Text("Kamu telah menekan tombol ${item.name}!")));
           // Navigate ke route yang sesuai (tergantung jenis tombol)
-          if (item.name == "Tambah Product") {
+          if (item.name == "Tambah Produk") {
             Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => const ProductEntryFormPage()),
             );
-          } else if (item.name == "Lihat Product") {
+          } else if (item.name == "Lihat Produk") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const ProductEntryPage()),
@@ -116,3 +116,4 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
+

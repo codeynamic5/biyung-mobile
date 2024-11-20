@@ -51,6 +51,8 @@ class Fields {
         image: json["image"],
     );
 
+  String get product => null;
+
     Map<String, dynamic> toJson() => {
         "user": user,
         "name": name,
