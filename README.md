@@ -2,6 +2,154 @@
 
 ## Premium Creations made with Love ❤️
 
+# Tugas 9: Integrasi Layanan Web Django dengan Aplikasi Flutter
+### 1. Jelaskan mengapa kita perlu membuat model untuk melakukan pengambilan ataupun pengiriman data JSON? Apakah akan terjadi error jika kita tidak membuat model terlebih dahulu? 
+Pembuatan model untul pengampilan atau pengiriman data JSON tidak wajib tapi sangat dianjurkan karena ada beberapa alasan penting:
+- Tanpa adanya model, data yang diterima tidak jelas tipe datanya. Dengan adanya model, setiap field bisa dipastikan tipe data yang sesuai.
+- Model juga memungkinkan penambahan validasi di setiap field dengan juga menentukan field yang disesuaikan. Oleh karena itu, hal tersebut memudahkan penanganan data yang belum lengkap atau tidak valid.
+- Kode yang dikembangkan lebih terstruktur dan mudah untuk dipahami. Dengan perubahan inti struktu bisa dilakukan di model untuk memudahkan dokumentasi API.
+  
+### 2. Jelaskan fungsi dari library http yang sudah kamu implementasikan pada tugas ini
+Library http dalam Flutter merupakan komponen penting yang berfungsi sebagai jembatan komunikasi antara aplikasi dan server melalui protokol HTTP. Ketika mengembangkan aplikasi Flutter, library ini menjadi alat utama untuk melakukan pertukaran data dengan server backend. Penggunaannya dalam tugas ini memungkinkan pengembang untuk mengakses dan mengambil data dari API (Application Programming Interface) serta mengirimkan data ke server dengan cara yang terstruktur dan efisien.
+
+Dalam implementasinya, library http menyediakan berbagai metode permintaan yang dapat disesuaikan dengan kebutuhan aplikasi. Pengembang dapat menggunakan metode GET untuk mengambil data dari server, POST untuk mengirim data baru, PUT untuk memperbarui data yang sudah ada, atau DELETE untuk menghapus data dari server. Fleksibilitas ini membuat library http menjadi pilihan yang serbaguna dalam menangani berbagai skenario komunikasi data antara aplikasi Flutter dan server.
+
+Kemampuan library ini dalam mengelola permintaan HTTP secara asynchronous juga memastikan bahwa aplikasi tetap responsif selama proses pertukaran data berlangsung. Dengan demikian, library http tidak hanya memfasilitasi komunikasi data, tetapi juga berkontribusi pada pengalaman pengguna yang lebih baik dengan memastikan kelancaran operasi aplikasi saat berinteraksi dengan server.
+
+### 3. Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+CookieRequest berperan sebagai fungsi khusus yang mengelola komunikasi HTTP dengan memanfaatkan sistem cookie. Dalam pengoperasiannya, fungsi ini secara otomatis mengatur berbagai aspek cookie yang dibutuhkan untuk proses autentikasi pengguna. Salah satu kemampuan utamanya adalah mempertahankan sesi pengguna dengan cara menyimpan dan mengirimkan cookie-cookie yang relevan pada waktu yang tepat. Yang membuat CookieRequest sangat efisien adalah kemampuannya untuk dibagikan ke seluruh komponen dalam sebuah aplikasi, sehingga memastikan bahwa setiap bagian aplikasi menggunakan sesi yang identik. Pendekatan ini tidak hanya menghindari pengulangan kode yang tidak perlu, tetapi juga menjamin bahwa proses autentikasi berjalan secara konsisten di semua bagian aplikasi. Dengan demikian, CookieRequest menjadi solusi terpadu untuk manajemen sesi dan autentikasi dalam pengembangan aplikasi.
+
+### 4. Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.
+Dalam integrasi Flutter dengan Django, proses pengiriman data mengikuti alur yang sistematis dan terorganisir. Semua dimulai ketika pengguna berinteraksi dengan antarmuka Flutter, memasukkan informasi melalui berbagai komponen seperti formulir atau elemen interaktif lainnya. Setelah data diinput, aplikasi Flutter berkomunikasi dengan backend Django menggunakan protokol HTTP, di mana metode POST digunakan untuk mengirim data baru, sementara GET dimanfaatkan untuk mengambil data yang sudah tersimpan. Ketika data mencapai Django, sistem backend ini menggunakan kombinasi view dan serializer untuk memproses dan memvalidasi data, memastikan bahwa informasi yang diterima sesuai dengan struktur yang diharapkan sebelum disimpan dalam database. Setelah proses penyimpanan berhasil, Django merespons dengan mengirimkan data dalam format JSON kembali ke aplikasi Flutter. Aplikasi Flutter kemudian mengolah respons JSON ini, mengubahnya menjadi objek yang dapat dimanipulasi, dan akhirnya menampilkannya kepada pengguna melalui berbagai widget seperti ListView atau Card. Seluruh proses komunikasi ini difasilitasi oleh API yang berfungsi sebagai jembatan penghubung antara frontend Flutter dan backend Django, menjamin perpindahan data yang aman dan efisien antara kedua sistem tersebut.
+
+### 5. Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+Sistem autentikasi dalam aplikasi melibatkan tiga fungsi utama yang saling terkait yaitu register, login, dan logout, yang semuanya beroperasi melalui interaksi antara Flutter dan Django. Dalam proses registrasi, aplikasi Flutter mengirimkan data pengguna berupa username, password, dan konfirmasi password dalam format JSON ke aplikasi auth Django melalui metode POST. Fungsi register dalam views.py kemudian memproses data ini dengan melakukan berbagai validasi, termasuk memastikan kecocokan password dengan konfirmasi password dan memeriksa keunikan username. Setelah validasi berhasil, sistem membuat user baru dan mengirimkan respons JSON yang berisi username kembali ke Flutter. Untuk proses login, aplikasi Flutter mengirimkan kredensial pengguna dalam format JSON ke endpoint login di aplikasi auth Django. Fungsi login dalam views.py menggunakan metode authenticate untuk memverifikasi username dan password yang diterima. Jika autentikasi berhasil, sistem mengirimkan respons JSON ke Flutter, yang kemudian menggunakan informasi ini untuk mengarahkan pengguna ke halaman utama aplikasi. Sementara itu, proses logout dijalankan ketika pengguna meminta untuk mengakhiri sesi, di mana Flutter memicu fungsi logout di aplikasi auth Django yang menggunakan auth_logout untuk mengakhiri sesi pengguna. Hasilnya dikembalikan dalam bentuk respons JSON yang digunakan Flutter untuk menentukan keberhasilan proses logout dan melakukan tindakan yang sesuai di sisi frontend.
+
+### 6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step!
+#### Mengimplementasikan fitur registrasi akun pada proyek tugas Flutter.
+Untuk implementasi fitur registrasi, saya membuat app authentication di proyek Django, memasukkan django-cors-headers di dalam `INSTALLED_APPS` yang saya modifikasi di dalam file `settings.py`. Saya juga menambahkan MIDDLEWARE di dalam file `settings.py`.<br/>
+**`settings.py`**
+```
+INSTALLED_APPS = [
+    
+    'corsheaders',
+]
+
+MIDDLEWARE = [
+    
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+```
+Di dalam file `views.py` saya menambahkan fungsi pada app authentication
+**`views.py`**
+```
+  @csrf_exempt
+  def register(request):
+      if request.method == 'POST':
+          data = json.loads(request.body)
+          username = data['username']
+          password1 = data['password1']
+          password2 = data['password2']
+  
+          # Check if the passwords match
+          if password1 != password2:
+              return JsonResponse({
+                  "status": False,
+                  "message": "Passwords do not match."
+              }, status=400)
+          
+          # Check if the username is already taken
+          if User.objects.filter(username=username).exists():
+              return JsonResponse({
+                  "status": False,
+                  "message": "Username already exists."
+              }, status=400)
+          
+          # Create the new user
+          user = User.objects.create_user(username=username, password=password1)
+          user.save()
+          
+          return JsonResponse({
+              "username": user.username,
+              "status": 'success',
+              "message": "User created successfully!"
+          }, status=200)
+      
+      else:
+          return JsonResponse({
+              "status": False,
+              "message": "Invalid request method."
+          }, status=400)
+```
+
+#### Membuat halaman login pada proyek tugas Flutter.
+Sebelum membuat halaman login, perlu mengunduh paket terlebih dahulu sehingga sistem autentikasi dapat terintegrasi dengan Django. Untuk mengunduh, dapat menjalankan di dalam terminal perintah berikut: `flutter pub add provider` dan `flutter pub add pbp_django_auth`. Di dalam file `main.dart` terdapat perubahan dari `home: MyHomePage()`, menjadi `home: const LoginPage()`. Hal tersebut agar aplikasi memiliki sifat login restricted.
+Seperti yang di atas, terdapat penambahan kode di dalam `views.py`:
+**`views.py`**
+```
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+```
+
+#### Mengintegrasikan sistem autentikasi Django dengan proyek tugas Flutter.
+Di dalam folder `screens` terdapat file `login.dart` yang dapat diintegrasikan dengan sistem autentikasi Django. Hal tersebut dapat dilakukan dengan cara membuat widget dan di dalamnya terdapat TextField yang dapat mengisi input username dan password. Pada fungsi login di dalam file `views.py`, dapat dibuat button untuk submit, hal tersebut dengan cara menggunakan `ElevatedButton` dan melakukan sebuah request untuk memungkinkan `onPressed()` bekerja, sehingga mengirimkan ke _Django App Authentication_. Apabila sukses dalam login, maka akan ada kondisi yang menunjukkan hal tersebut, sama halnya kalo login gagal. Jika login berhasil dilakukan, kembangkan `pushReplacement` ke dalam file `menu.dart`. Beda halnya apabila gagal login, maka akan tetap di halaman login.
+
+#### Membuat model kustom sesuai dengan proyek aplikasi Django.
+Dalam pembuatan model kustom, buat beberapa contoh produk yang akan ditambah dengan add new product, setelah itu dapat mengambil data dalam format JSON yang dapat diambil dari website Quicktype. Dalam proyek Flutternya, dapat membuat direktori baru khusus data JSON yang telah diconvert sebelumnya. File tersebut bernama `product_entry.dart`.
+
+#### Membuat halaman yang berisi daftar semua item yang terdapat pada endpoint JSON di Django
+Pembuatan halaman yang berisi daftar semua item, pertama harus membuat sebuah file di dalam folder screens yang bernama `list_productentry.dart`. Di dalam file tersebut, data JSON Django yang telah dikumpulkan akan dimasukkan di dalam file dan buat menjadi sebuah list. Untuk penyempurnaan struktur, dapat membuat ListView sesuai dengan data yang ingin ditampilkan dalam bentuk kolom yang rapi di dalam aplikasi. Dari situ, nama produk, harga produk, dan deskripsi produk dapat ditampilkan di dalam aplikasi.
+
+
+#### Membuat halaman detail untuk setiap item yang terdapat pada halaman daftar Item.
+Untuk membuat halaman detail setiap item, di dalam file `list_productentry.dart`, lengkapi ListView dengan menambahkan fungsi `onPressed()`. Fungsi ini akan memungkinkan setiap item dalam list memberikan respons ketika ditekan. Untuk navigasi, dapat menggunakan metode `Navigator.push()`, sehingga memungkinkan operasi pop pada halaman berikutnya. Di dalam fungsi `onPressed()`, lakukan pengiriman data product agar dapat digunakan di halaman lainnya.
+
+Selanjutnya, buatlah berkas baru dengan nama `details_product.dart` dalam direktori screens. Karena data product telah dikirimkan dari `list_productentry.dart`, pada `details_product.dart` kita hanya perlu menampilkan informasi dari setiap field data product tersebut. Tambahkan juga sebuah `ElevatedButton` dengan implementasi `onPressed()` yang ketika ditekan akan menggunakan `Navigator.pop` untuk mengarahkan pengguna kembali ke halaman daftar produk.
+
+#### Melakukan filter pada halaman daftar item dengan hanya menampilkan item yang terasosiasi dengan pengguna yang login.
+Dalam melakukan filter pada halaman daftar item, dapat melakukan modifikasi pada saat login, dimana flutter mengirim sebuah informasi tentang username dan password ke Django. Sehingga, memungkinkan untuk dilakukan filter terhadap masing-masing pengguna yang sesuai. Di sinilah method `authenticate` dapat digunakan, yaitu sebagai berikut:
+```
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+
+```
+Authenticate digunakan dengan tujuan membatasi pengguna yang memgakses aplikasi, sehingga pengguna yang telah login saja yang dapat mengakses semua fitur dalam aplikasi. 
+
 # Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
 ### 1. Kegunaan const di Flutter. Keuntungan Menggunakan const pada Kode Flutter. Kapan sebaiknya menggunakan const, dan kapan sebaiknya tidak digunakan?
 Di Flutter, kata kunci `const` digunakan untuk mendefinisikan *immutable* objects, yaitu objek yang tidak dapat diubah setelah dibuat. Dengan `const`, kita dapat membuat objek konstan di mana nilainya akan tetap sama selama aplikasi berjalan.
